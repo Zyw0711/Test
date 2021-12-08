@@ -1,0 +1,108 @@
+#统一格式箱线图
+ggplot(sexratio_fp_compare,aes(type,fp))+
+  stat_boxplot(geom="errorbar",width=0.15,size=0.5)+
+  geom_boxplot(aes(fill=type),color="black",width=0.4,size=0.5)+
+  geom_jitter(width=0.1)+
+  geom_signif(comparisons = list(c("adult","pupae")),test="t.test",map_signif_level =c("***"=0.001,"**"=0.01,"*"=0.05),color="black",size=1)+
+  labs(y="Female rate(%)",x="Inoculation of parasitic wasps")+
+  geom_hline(yintercept = 50,colour="black",alpha=0.5,linetype="dashed")+
+  theme_bw()+
+  theme(
+    legend.position = "none",
+    panel.grid=element_blank(),
+    panel.border = element_blank(),
+    axis.line = element_line(color="black",size=0.5),
+    axis.ticks=element_line(size=0.8,color="black"),
+    axis.title.y=element_text(size=16,color="black"),
+    axis.title.x=element_text(size=16,color="black"),
+    axis.text.y=element_text(size=12,color="black"),
+    axis.text.x=element_text(size=12,color="black"),
+  )+
+  scale_fill_manual(values=c('#f94144','#577590'))
+
+#字体设置
+windowsFonts(TNR=windowsFont("times new roman"))
+windowsFonts(CA=windowsFont("Calibri"))
+mytheme<-
+theme_bw()+#去除背景
+theme(
+panel.grid=element_blank(),#去除网格线
+panel.border = element_blank(),#去除图表边框
+axis.line = element_line(color="black",size=0.8),#坐标轴线
+axis.ticks=element_line(size=0.8),#坐标轴刻度线
+axis.title.y=element_text(size=16,color="black"),axis.title.x=element_blank(),#坐标轴标题参数
+axis.text.y=element_text(size=12,color="black"),axis.text.x=element_text(size=16,color="black"),#坐标轴刻度参数
+legend.text = element_text(size=10,face="bold"),#图例文本参数
+legend.title=element_blank()#图例标题
+           )
+
+#显著性标注
+geom_signif(comparisons = list(c("CK","Treatment")),test="t.test",map_signif_level =c("***"=0.001,"**"=0.01,"*"=0.05),color="black",size=1)
+map_signif_level =function(p)sprintf("p=%.2g",p)#显示具体p值
+
+#一页多图
+#将p1-p4四幅图组合成一幅图，按照两行两列排列，标签分别为A、B、C、D，颜色为红色(通过font.label = list()修改)，无法通过label.color = 'red'或其他方式修改。
+ggpubr::ggarrange(p1, p2, p3, p4, nrow = 2, ncol = 2, labels = c('A', 'B', 'C', 'D'), font.label = list(color = 'red'))
+
+#patchwork包多图拼接
+p1|(p2+p3)+plot_annotation(tag_levels = "A")
+
+#带bar值标注箱线散点图
+stat_boxplot(geom="errorbar",color="black",width=0.15,size=0.8)+
+geom_boxplot(aes(fill=type),color="black",width=0.6,position=position_dodge(0.3))+
+geom_jitter(width = 0.1,color="black",alpha=0.8)
+
+#使用tidyverse包stat_summary函数做点线图，不同原始数据整理
+ggplot(df_mean_p_rate,aes(date,p_rate_mean,group=type,color=type))+
+  stat_summary(fun="mean",geom="point",size=3)+
+  stat_summary(fun="mean",geom="line")+
+  stat_summary(fun.data = "mean_se",geom="errorbar",width=0.1)+
+  labs(y="Parasitism rate (%)",x="Date")+
+  theme_bw()+
+  theme(
+    legend.position = c(0.9,0.8),
+    panel.grid=element_blank(),
+    panel.border = element_blank(),
+    axis.line = element_line(color="black",size=0.5),
+    axis.ticks=element_line(size=0.8,color="black"),
+    axis.title.y=element_text(size=16,color="black"),
+    axis.title.x=element_text(size=16,color="black"),
+    axis.text.y=element_text(size=12,color="black"),
+    axis.text.x=element_text(size=12,color="black"),
+  )+
+  scale_color_manual(values=c("#EF476F","#FFD166","#06D6A0","#118AB2","#073B4C"))
+
+#色板
+color = c('#f94144', '#f3722c', '#f8961e', '#f9c74f', '#90be6d', '#43aa8b', '#577590')
+p7 + scale_fill_manual(values = color)
+
+#修改因子排列顺序
+culturedishc$time<-factor(culturedishc$time,levels = c("before","after"))
+
+#卡方检验（x位矩阵）
+chisq.test(x)
+x 观测值  x1  x2
+x 期望值  x3  x4
+
+#去除含有NA值的行
+data<-subset(data,value1!="NA")
+data<-na.omit(data)
+
+#图例上下顺序的改变
+guides(color=guide_legend(order = 0),size=guide_legend(order = 1))+
+
+#控制点图大小
+scale_size_continuous(range=c(4,10))
+
+#正态性检验
+1 shapiro.test(iris$Sepal.Length)
+2 ks.test(x, y, ...,
+        alternative = c("two.sided", "less", "greater"),
+        exact = NULL)
+3 QQ图
+library(ggpubr)
+ggqqplot(iris$Sepal.Length,color = "blue",main="Normal Q-Q Plot")
+ SPSS 规定: 当样本含量3 ≤ n ≤ 5000时, 结果以Shapiro-Wilk为准, 当样本含量n > 5000结果以Kolmogorov-Smirnov为准.
+
+#数据表长宽转换 tidyr包 gather、spread、separate函数
+https://blog.csdn.net/six66667/article/details/84888644
