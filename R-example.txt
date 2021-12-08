@@ -1,18 +1,17 @@
-#统一格式箱线图
-ggplot(sexratio_fp_compare,aes(type,fp))+
-  stat_boxplot(geom="errorbar",width=0.15,size=0.5)+
-  geom_boxplot(aes(fill=type),color="black",width=0.4,size=0.5)+
-  geom_jitter(width=0.1)+
-  geom_signif(comparisons = list(c("adult","pupae")),test="t.test",map_signif_level =c("***"=0.001,"**"=0.01,"*"=0.05),color="black",size=1)+
-  labs(y="Female rate(%)",x="Inoculation of parasitic wasps")+
-  geom_hline(yintercept = 50,colour="black",alpha=0.5,linetype="dashed")+
+#单变量双处理统一格式箱线图
+ggplot(df,aes(x,y))+
+  stat_boxplot(geom="errorbar",color="black",width=0.15,size=0.5)+
+  geom_boxplot(aes(fill=x),color="black",width=0.4,size=0.5)+
+  geom_jitter(width=0.1,color="black")+
+  geom_signif(comparisons = list(c("x1","x2")),test="t.test",map_signif_level =c("***"=0.001,"**"=0.01,"*"=0.05),color="black",size=1)+
+  labs(y="Yyyyyyyy",x="Xxxxxxxx")+
   theme_bw()+
   theme(
     legend.position = "none",
     panel.grid=element_blank(),
     panel.border = element_blank(),
     axis.line = element_line(color="black",size=0.5),
-    axis.ticks=element_line(size=0.8,color="black"),
+    axis.ticks=element_line(size=0.5,color="black"),
     axis.title.y=element_text(size=16,color="black"),
     axis.title.x=element_text(size=16,color="black"),
     axis.text.y=element_text(size=12,color="black"),
@@ -20,7 +19,10 @@ ggplot(sexratio_fp_compare,aes(type,fp))+
   )+
   scale_fill_manual(values=c('#f94144','#577590'))
 
-#字体设置
+#添加水平参考线
+ geom_hline(yintercept = 50,colour="black",alpha=0.5,linetype="dashed")+
+
+#字体与风格参数设置
 windowsFonts(TNR=windowsFont("times new roman"))
 windowsFonts(CA=windowsFont("Calibri"))
 mytheme<-
@@ -31,7 +33,7 @@ panel.border = element_blank(),#去除图表边框
 axis.line = element_line(color="black",size=0.8),#坐标轴线
 axis.ticks=element_line(size=0.8),#坐标轴刻度线
 axis.title.y=element_text(size=16,color="black"),axis.title.x=element_blank(),#坐标轴标题参数
-axis.text.y=element_text(size=12,color="black"),axis.text.x=element_text(size=16,color="black"),#坐标轴刻度参数
+axis.text.y=element_text(size=12,color="black"),axis.text.x=element_text(size=16,color="black"),#坐标轴刻度文本参数
 legend.text = element_text(size=10,face="bold"),#图例文本参数
 legend.title=element_blank()#图例标题
            )
@@ -64,7 +66,7 @@ ggplot(df_mean_p_rate,aes(date,p_rate_mean,group=type,color=type))+
     panel.grid=element_blank(),
     panel.border = element_blank(),
     axis.line = element_line(color="black",size=0.5),
-    axis.ticks=element_line(size=0.8,color="black"),
+    axis.ticks=element_line(size=0.5,color="black"),
     axis.title.y=element_text(size=16,color="black"),
     axis.title.x=element_text(size=16,color="black"),
     axis.text.y=element_text(size=12,color="black"),
@@ -72,9 +74,10 @@ ggplot(df_mean_p_rate,aes(date,p_rate_mean,group=type,color=type))+
   )+
   scale_color_manual(values=c("#EF476F","#FFD166","#06D6A0","#118AB2","#073B4C"))
 
-#色板
+#色板及颜色手动控制
 color = c('#f94144', '#f3722c', '#f8961e', '#f9c74f', '#90be6d', '#43aa8b', '#577590')
 p7 + scale_fill_manual(values = color)
+     +scale_color_manual(values =color)
 
 #修改因子排列顺序
 culturedishc$time<-factor(culturedishc$time,levels = c("before","after"))
